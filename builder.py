@@ -123,3 +123,7 @@ class Sidekick:
 
     def set_initiative(self):
         return self.scores['DEX'].mod
+
+    def level_up(self):
+        # TODO: Make sure this goes through all the attached stuff and updates everything.
+        pass
