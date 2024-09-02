@@ -59,6 +59,32 @@ class Skill:
         self.expert = True
 
 
+class Feature:
+    def __init__(self, name, level, class_, desc, desc_short=None):
+        self.name: str = name
+        self.level: int = level
+        self.class_: str = class_
+        self.desc: str or None = desc
+        self.desc_short: str = desc_short
+
+
+class Spellcasting(Feature):  # TODO: update to track spells known and spell slots. Might need spell slot class?
+    def __init__(self, role, spell_list, ability, focus, prof_bonus):
+        super().__init__('Spellcasting', 1, 'Spellcaster', None)
+        self.role: str = role
+        self.spell_list: list[str] = spell_list
+        self.focus: str = focus
+        self.ability: AbilityScore = ability
+        self.spell_save_dc = self.set_spell_save_dc(prof_bonus)
+        self.spell_atk_bonus = self.set_spell_atk_bonus(prof_bonus)
+
+    def set_spell_save_dc(self, prof_bonus):
+        return 8 + prof_bonus + self.ability.mod
+
+    def set_spell_atk_bonus(self, prof_bonus):
+        return prof_bonus + self.ability.mod
+
+
 class Sidekick:
     def __init__(self, name: str, class_: str, type_: str, race: str, level: int, speed: int, scores: dict):
         self.name = name
@@ -67,7 +93,7 @@ class Sidekick:
         self.race = race
         self.level = level
         self.speed = speed
-        self.armor_class = self.set_armor_class()  # TODO: reference inventory somehow
+        self.armor_class = self.set_armor_class()
         self.proficiency_bonus = self.set_proficiency_bonus()
         self.initiative = self.set_initiative()
         self.scores: dict[str, AbilityScore] = self.set_ability_scores(scores)
@@ -80,6 +106,7 @@ class Sidekick:
         return scores_dict
 
     def set_armor_class(self):
+        # TODO: reference inventory somehow
         return None
 
     def set_proficiency_bonus(self):
